@@ -29,12 +29,12 @@ function activate(context) {
 	context.subscriptions.push(disposable);
 
 	const xStockHost = 'https://api.money.126.net/data/feed/';
-	var stockCodes = new Array('603893', '603069');
+	var stockCodes = new Array('0603893', '0603069');
 	axios.default
 		.get(`${xStockHost}${stockCodes.join(',')}?callback=a`)
 		.then(resp => {
-			console.log(`${resp}`);
-			createStatusBarItem(resp);
+			console.log(`${resp.data}`);
+			createStatusBarItem(resp.data);
 		})
 		.catch(e => {
 			console.error(e);
@@ -52,7 +52,7 @@ module.exports = {
 
 function createStatusBarItem(item) {
 	const barItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left, 0);
-	barItem.text = "1313";
+	barItem.text = `${item}`;
 	barItem.show();
 	return barItem;
 }
