@@ -28,12 +28,23 @@ function activate(context) {
 
 	context.subscriptions.push(disposable);
 
-	const xStockHost = 'https://api.money.126.net/data/feed/';
-	var stockCodes = new Array('0603893', '0603069');
+	const stockCode = '603893';
+	const thsBasedHost = `http://d.10jqka.com.cn/`;
+	const thsStockAll = `${thsBasedHost}v6/line/hs_${stockCode}/01/all.js`;
 	axios.default
-		.get(`${xStockHost}${stockCodes.join(',')}?callback=a`)
+		.get(thsStockAll
+			, {
+				timeout: 1000,
+				headers: {
+					'Referer': 'http://m.10jqka.com.cn/stockpage/',
+					'Accept': 'application/json, text/plain, */*',
+					'Accept-Encoding': 'gzip, deflate'
+				}
+			}
+		)
 		.then(resp => {
-			console.log(`${resp.data}`);
+			var s = resp.data.replace('quotebridge_v6_line_hs_603893_01_all(', '');
+			console.log(`${s}`);
 			createStatusBarItem(resp.data);
 		})
 		.catch(e => {
